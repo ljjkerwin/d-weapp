@@ -1,0 +1,73 @@
+<template>
+  <view class="container">
+    <scroll-view class="act-list" wx:if="{{actList}}">
+      <view class="act-item" 
+        wx:for="{{actList}}"
+        wx:key="{{index}}"
+        bindtap="handleTapAct"
+        data-item="{{item}}"
+      >
+        <image class="bg" src="{{item.img}}" mode="aspectFill" lazy-load="true" />
+        <view class="content">
+          <view class="title">{{item.title}}</view>
+          <view class="desc">
+            <view>{{item.time}}</view>
+            <view>{{item.address}}</view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <tab-bar />
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import TabBar from '../components/tab-bar'
+
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '活动'
+    }
+    components = {
+      'tab-bar': TabBar
+    }
+  
+    data = {
+      actList: null
+    }
+
+    onLoad() {
+      this.actList = this.getActList()
+    }
+
+    handleTapAct(e) {
+      let item = e.currentTarget.dataset.item
+
+      wx.navigateTo({
+        url: '/pages/act?id=123',
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {}
+      })
+    }
+
+    getActList() {
+      let item = {
+        title: '阿斯顿；发了卡就是对方了解啊；市劳动局发生的发生了都快',
+        img: 'http://s.cimg.163.com/i/img15.3lian.com/2015/a1/15/d/80.jpg.600x600.auto.jpg',
+        time: '2011.11.11',
+        address: 'guangzhou',
+        like: 100,
+        comments: 10
+      }
+      return [...Array(13)].map(() => ({...item}))
+    }
+  }
+</script>
+
+<style lang="less">
+  @import './index.less';
+</style>

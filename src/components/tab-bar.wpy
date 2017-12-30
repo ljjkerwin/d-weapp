@@ -1,0 +1,55 @@
+<template>
+  <view class="tab-bar">
+    <view class="tab-bar-item {{activeIndex === index ? 'active' : ''}}" wx:for="{{tabs}}" wx:key="{{index}}" bindtap="onTapItem" data-url="{{item.url}}">
+      <text>{{item.name}}</text>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class TabBar extends wepy.component {
+    data = {
+      tabs: [{
+          name: '活动',
+          url: '/pages/index'
+        },
+        {
+          name: '我',
+          url: '/pages/me'
+        }
+      ],
+      activeIndex: 0
+    }
+    methods = {
+      onTapItem(e) {
+        let url = e.currentTarget.dataset.url
+        let page = this.getCurrentPage()
+        if (url.indexOf(page.route) >= 0) return
+        wx.redirectTo({
+          url
+        })
+      }
+    }
+    getCurrentPage() {
+      console.log(getCurrentPages().slice(-1))
+      return getCurrentPages().slice(-1)[0]
+    }
+    attached() {
+      let page = this.getCurrentPage()
+      let activeIndex = 0
+      this.data.tabs.forEach((tab, index) => {
+        if (tab.url.indexOf(page.route) >= 0) {
+          activeIndex = index
+        }
+      })
+      this.setData({
+        activeIndex
+      })
+    }
+  }
+</script>
+
+<style lang='less'>
+  @import './tab-bar.less';
+</style>
